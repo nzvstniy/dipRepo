@@ -1,0 +1,270 @@
+<router-outlet></router-outlet>
+
+
+<header class="header-area overlay">
+
+  <nav class="navbar navbar-expand-md navbar-dark sticky-top">
+  <div class="container">
+    <a href="" class="navbar-brand">Дипломная работа</a>
+
+    <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#main-nav">
+      <span class="menu-icon-bar"></span>
+      <span class="menu-icon-bar"></span>
+      <span class="menu-icon-bar"></span>
+    </button>
+
+    <div id="main-nav"  class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li><a routerLink="/home" class="nav-item nav-link active">Главная</a></li>
+        <li> <a routerLink="/table" class="nav-item nav-link">Таблицы</a></li>
+        <li class="dropdown">
+          <a href="#" class="nav-item nav-link" data-toggle="dropdown">дроп 1</a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">Dropdown Item 1</a>
+            <a href="#" class="dropdown-item">Dropdown Item 2</a>
+            <a href="#" class="dropdown-item">Dropdown Item 3</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="nav-item nav-link" data-toggle="dropdown">дроп 2</a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item">Dropdown Item 1</a>
+            <a href="#" class="dropdown-item">Dropdown Item 2</a>
+            <a href="#" class="dropdown-item">Dropdown Item 3</a>
+            <a href="#" class="dropdown-item">Dropdown Item 4</a>
+            <a href="#" class="dropdown-item">Dropdown Item 5</a>
+          </div>
+        </li>
+        <li><a href="#" class="nav-item nav-link">мб пригодится</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+</header>
+
+<main>
+
+  <section id="tabs" class="project-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-acid-tab" data-toggle="tab" href="#nav-acid" role="tab" aria-controls="nav-acid" aria-selected="true">Acid</a>
+                        <a class="nav-item nav-link" id="nav-o-acid-tab" data-toggle="tab" href="#nav-o-acid" role="tab" aria-controls="nav-o-acid" aria-selected="false">O-Acid</a>
+                        <a class="nav-item nav-link" id="nav-po-acid-tab" data-toggle="tab" href="#nav-po-acid" role="tab" aria-controls="nav-po-acid" aria-selected="false">Po-Acid</a>
+                        <a class="nav-item nav-link" id="nav-plant-oil-tab" data-toggle="tab" href="#nav-plant-oil" role="tab" aria-controls="nav-plant-oil" aria-selected="false">Plant-Oil</a>
+                        <a class="nav-item nav-link" id="nav-oil-tab" data-toggle="tab" href="#nav-oil" role="tab" aria-controls="nav-oil" aria-selected="false">Oil</a>
+                    </div>
+                </nav>
+
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-acid" role="tabpanel" aria-labelledby="nav-acid-tab">
+                      <div class="addBtn">
+                      <button (click)="onOpenAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span></button>
+                    </div>
+                      <table mat-table [dataSource]="acids"  class="mat-elevation-z8" >
+                        <ng-container matColumnDef="id_acid">
+                          <mat-header-cell *matHeaderCellDef > id </mat-header-cell>
+                          <mat-cell  *matCellDef="let acids"> {{acids.id_acid}}
+                            <div class="bothBtn">
+                              <button (click)="onOpenAcidModal('edit', acids)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                              <button (click)="onOpenAcidModal('delete', acids)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></button>
+                            </div>
+                          </mat-cell>
+
+                        </ng-container>
+
+                        <ng-container matColumnDef="acid_name" >
+                          <mat-header-cell *matHeaderCellDef > name </mat-header-cell>
+                          <mat-cell *matCellDef="let acids"> {{acids.acid_name}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acid_full_name">
+                          <mat-header-cell *matHeaderCellDef > full </mat-header-cell>
+                          <mat-cell *matCellDef="let acids"> {{acids.acid_full_name}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acid_description">
+                          <mat-header-cell *matHeaderCellDef > desc </mat-header-cell>
+                          <mat-cell *matCellDef="let acids"> {{acids.acid_description}}
+
+                          </mat-cell>
+                           </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="acidColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: acidColumns;"></mat-row>
+                      </table>
+
+                          <!-- Add Acid Modal -->
+    <div class="modal fade" id="addAcidModal" tabindex="-1" role="dialog" aria-labelledby="addAcidModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="addAcidModalLabel">Add Employee</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #addForm="ngForm" (ngSubmit)="onAddAcid(addForm)">
+              <div class="form-group">
+                 <label for="acid_name">Номер</label>
+                 <input type="text" ngModel name="acid_name" class="form-control" id="acid_name" placeholder="Номер" required>
+              </div>
+              <div class="form-group">
+                 <label for="acid_full_name">Название</label>
+                 <input type="text" ngModel name="acid_full_name" class="form-control" id="acid_full_name" placeholder="Название" required>
+              </div>
+              <div class="form-group">
+                 <label for="acid_description">Описание</label>
+                 <input type="text" ngModel name="acid_description" class="form-control" id="acid_description" placeholder="Описание" required>
+              </div>
+              <div class="modal-footer">
+                 <button type="button" id="add-acid-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <!--[disabled]="addForm.invalid"--><button type="submit" class="btn btn-primary" >Save changes</button>
+              </div>
+              </form>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Acid -->
+    <div class="modal fade" id="editAcidModal" tabindex="-1" role="dialog" aria-labelledby="acidEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updateAcidModalLabel">Изменить {{editAcids?.acid_full_name}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="acid_full_name">Название</label>
+                     <input type="text" ngModel="{{editAcids?.acid_full_name}}" name="acid_full_name" class="form-control" id="acid_full_name" aria-describedby="fullNameHelp" placeholder="Название">
+                  </div>
+                  <input type="hidden" ngModel="{{editAcids?.id_acid}}" name="id_acid" class="form-control" id="id_acid" placeholder="Id">
+                  <div class="form-group">
+                     <label for="acid_name">Номер</label>
+                     <input type="text" ngModel="{{editAcids?.acid_name}}" name="acid_name" class="form-control" id="acid_name" placeholder="Номер">
+                  </div>
+                  <div class="form-group">
+                     <label for="acid_description">Описание</label>
+                     <input type="text" ngModel="{{editAcids?.acid_description}}" name="acid_description" class="form-control" id="acid_description" placeholder="Описание">
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                     <button (click)="onUpdateAcid(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+    </div>
+                      <!--Delete Acid-->
+                      <div class="modal fade" id="deleteAcidModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="deleteModelLabel">Delete Acid</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 <p>Удалить "{{deleteAcid?.acid_full_name}}"?</p>
+                                 <div class="modal-footer">
+                                    <button (click)="onDeleteAcid(deleteAcid!.id_acid)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <div class="tab-pane fade" id="nav-o-acid" role="tabpanel" aria-labelledby="nav-o-acid-tab">
+                      <div class="addBtn">
+                        <button (click)="onOpenOAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span></button>
+                      </div>
+                        <table mat-table [dataSource]="oAcids"  class="mat-elevation-z8" >
+                          <ng-container matColumnDef="id_oil">
+                            <mat-header-cell *matHeaderCellDef > id </mat-header-cell>
+                            <mat-cell  *matCellDef="let oAcids"> {{oAcids.id_oil}}
+                              <div class="bothBtn">
+                                <button (click)="onOpenOAcidModal('edit', oAcids)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                <button (click)="onOpenOAcidModal('delete', oAcids)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></button>
+                              </div>
+                            </mat-cell>
+
+                          </ng-container>
+
+                          <ng-container matColumnDef="acid_name" >
+                            <mat-header-cell *matHeaderCellDef > name </mat-header-cell>
+                            <mat-cell *matCellDef="let oAcids"> {{oAcids.acid_name}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="acid_value">
+                            <mat-header-cell *matHeaderCellDef > full </mat-header-cell>
+                            <mat-cell *matCellDef="let oAcids"> {{oAcids.acid_value}} </mat-cell>
+                          </ng-container>
+
+
+                          <mat-header-row *matHeaderRowDef="oAcidColumns"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: oAcidColumns;"></mat-row>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-po-acid" role="tabpanel" aria-labelledby="nav-po-acid-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Номер кислоты</th>
+                                    <th>Минимальное содержание кислоты</th>
+                                    <th>Максимальное содержание кислоты</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-plant-oil" role="tabpanel" aria-labelledby="nav-plant-oil-tab">
+                      <table class="table" cellspacing="0">
+                          <thead>
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Название масла</th>
+                                  <th>Описание</th>
+
+                              </tr>
+                          </thead>
+                      </table>
+                  </div>
+                  <div class="tab-pane fade" id="nav-oil" role="tabpanel" aria-labelledby="nav-oil-tab">
+                    <table class="table" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название масла</th>
+                                <th>Страна</th>
+                                <th>Производитель</th>
+                                <th>Сорт</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+  </main>
+
