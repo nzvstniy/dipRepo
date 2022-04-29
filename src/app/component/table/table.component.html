@@ -66,6 +66,25 @@
                       <div class="addBtn">
                       <button (click)="onOpenAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span></button>
                     </div>
+                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                      <thead>
+                          <tr>
+                              <th>id</th>
+                              <th>full</th>
+                              <th>desc</th>
+                              <th>name</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let acid of acids">
+                              <td >{{acid.id_acid}}</td>
+                              <td >{{acid.acid_full_name}}</td>
+                              <td >{{acid.acid_description}}</td>
+                              <td >{{acid.acid_name}}</td>
+                        </tr>
+                      </tbody>
+                      </table>
+                    <!--
                       <table mat-table [dataSource]="acids"  class="mat-elevation-z8" >
                         <ng-container matColumnDef="id_acid">
                           <mat-header-cell *matHeaderCellDef > id </mat-header-cell>
@@ -98,7 +117,7 @@
                         <mat-header-row *matHeaderRowDef="acidColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: acidColumns;"></mat-row>
                       </table>
-
+-->
                           <!-- Add Acid Modal -->
     <div class="modal fade" id="addAcidModal" tabindex="-1" role="dialog" aria-labelledby="addAcidModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
