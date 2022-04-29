@@ -9,7 +9,7 @@ import { Oil } from './../../interface/tableInterface/oil';
 import { oAcid } from './../../interface/tableInterface/o_Acid';
 import { Acid } from './../../interface/tableInterface/acid';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Injectable, Output, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Injectable, Output, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,11 +18,15 @@ import { MatTableDataSource } from '@angular/material/table';
 import { environment } from 'src/environments/environment';
 import { OilService } from 'src/app/service/oil.service';
 import {Sort} from '@angular/material/sort'
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
+
 @Injectable()
 export class TableComponent implements OnInit {
 
@@ -55,6 +59,7 @@ export class TableComponent implements OnInit {
   public poAcids: poAcid[] = [];
   public editPo_Acids: poAcid | undefined;
   public deletePo_Acids: poAcid | undefined;
+  dtOptions: DataTables.Settings = {};
 
 
 
@@ -75,8 +80,35 @@ export class TableComponent implements OnInit {
     this.getOil();
     this.getPlantOil();
     this.getPo_Acid();
+    this.dtOptions = {
+      pagingType: 'first_last_numbers',
+      pageLength: 5,
+      processing: true,
+      scrollY: "345px",
 
-
+      "language": {
+        "info": "Показано _PAGE_ из _PAGES_ страниц.",
+        "infoEmpty":"Не найдено.",
+        "zeroRecords":"Нет записей.",
+        "infoFiltered": "Отфильтровано по _MAX_.",
+        "lengthMenu": 'Показать <select>'+
+                    '<option value="5">5</option>'+
+                    '<option value="10">10</option>'+
+                    '<option value="20">20</option>'+
+                    '<option value="30">30</option>'+
+                    '<option value="40">40</option>'+
+                    '<option value="50">50</option>'+
+                    '<option value="-1">Все</option>'+
+                    '</select> записей',
+          "search": "Поиск:",
+          "paginate": {
+            "first": "Первая",
+            "last":"Последняя",
+            "next":"",
+            "previous":""
+          }
+      }
+    }
   }
 
   public getAcid(): void {

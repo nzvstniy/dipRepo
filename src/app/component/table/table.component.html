@@ -52,8 +52,8 @@
 
                 <nav>
                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-acid-tab" data-toggle="tab" href="#nav-acid" role="tab" aria-controls="nav-acid" aria-selected="true">Acid</a>
-                        <a class="nav-item nav-link" id="nav-o-acid-tab" data-toggle="tab" href="#nav-o-acid" role="tab" aria-controls="nav-o-acid" aria-selected="false">O-Acid</a>
+                        <a class="nav-item nav-link active" id="nav-acid-tab" data-toggle="tab" href="#nav-acid" role="tab" aria-controls="nav-acid" aria-selected="true" >Acid</a>
+                        <a class="nav-item nav-link" id="nav-o-acid-tab" data-toggle="tab" href="#nav-o-acid" role="tab" aria-controls="nav-o-acid" aria-selected="false" >O-Acid</a>
                         <a class="nav-item nav-link" id="nav-po-acid-tab" data-toggle="tab" href="#nav-po-acid" role="tab" aria-controls="nav-po-acid" aria-selected="false">Po-Acid</a>
                         <a class="nav-item nav-link" id="nav-plant-oil-tab" data-toggle="tab" href="#nav-plant-oil" role="tab" aria-controls="nav-plant-oil" aria-selected="false">Plant-Oil</a>
                         <a class="nav-item nav-link" id="nav-oil-tab" data-toggle="tab" href="#nav-oil" role="tab" aria-controls="nav-oil" aria-selected="false">Oil</a>
@@ -66,58 +66,30 @@
                       <div class="addBtn">
                       <button (click)="onOpenAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span></button>
                     </div>
-                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <table datatable class="row-border hover" id="acids" [dtOptions]="dtOptions" >
                       <thead>
                           <tr>
-                              <th>id</th>
-                              <th>full</th>
-                              <th>desc</th>
-                              <th>name</th>
+                              <th>ID</th>
+                              <th>Название</th>
+                              <th>Номер</th>
+                              <th>Описание</th>
+                              <th>Действие</th>
                           </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let acid of acids">
-                              <td >{{acid.id_acid}}</td>
+                              <td class="id_acid" >{{acid.id_acid}}</td>
+                              <td >{{acid.acid_name}}</td>
                               <td >{{acid.acid_full_name}}</td>
                               <td >{{acid.acid_description}}</td>
-                              <td >{{acid.acid_name}}</td>
+                              <td><div class="bothBtn">
+                                <button (click)="onOpenAcidModal('edit', acid)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                <button (click)="onOpenAcidModal('delete', acid)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                              </div></td>
                         </tr>
                       </tbody>
                       </table>
-                    <!--
-                      <table mat-table [dataSource]="acids"  class="mat-elevation-z8" >
-                        <ng-container matColumnDef="id_acid">
-                          <mat-header-cell *matHeaderCellDef > id </mat-header-cell>
-                          <mat-cell  *matCellDef="let acids"> {{acids.id_acid}}
-                            <div class="bothBtn">
-                              <button (click)="onOpenAcidModal('edit', acids)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
-                              <button (click)="onOpenAcidModal('delete', acids)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></button>
-                            </div>
-                          </mat-cell>
 
-                        </ng-container>
-
-                        <ng-container matColumnDef="acid_name" >
-                          <mat-header-cell *matHeaderCellDef > name </mat-header-cell>
-                          <mat-cell *matCellDef="let acids"> {{acids.acid_name}} </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="acid_full_name">
-                          <mat-header-cell *matHeaderCellDef > full </mat-header-cell>
-                          <mat-cell *matCellDef="let acids"> {{acids.acid_full_name}} </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="acid_description">
-                          <mat-header-cell *matHeaderCellDef > desc </mat-header-cell>
-                          <mat-cell *matCellDef="let acids"> {{acids.acid_description}}
-
-                          </mat-cell>
-                           </ng-container>
-
-                        <mat-header-row *matHeaderRowDef="acidColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: acidColumns;"></mat-row>
-                      </table>
--->
                           <!-- Add Acid Modal -->
     <div class="modal fade" id="addAcidModal" tabindex="-1" role="dialog" aria-labelledby="addAcidModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -210,35 +182,31 @@
 
 
 
-                    <div class="tab-pane fade" id="nav-o-acid" role="tabpanel" aria-labelledby="nav-o-acid-tab">
+                    <div class="tab-pane fade" id="nav-o-acid" role="tabpanel" aria-labelledby="nav-o-acid-tab" >
                       <div class="addBtn">
                         <button (click)="onOpenOAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span></button>
                       </div>
-                        <table mat-table [dataSource]="oAcids"  class="mat-elevation-z8" >
-                          <ng-container matColumnDef="id_oil">
-                            <mat-header-cell *matHeaderCellDef > id </mat-header-cell>
-                            <mat-cell  *matCellDef="let oAcids"> {{oAcids.id_oil}}
-                              <div class="bothBtn">
-                                <button (click)="onOpenOAcidModal('edit', oAcids)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
-                                <button (click)="onOpenOAcidModal('delete', oAcids)" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></button>
-                              </div>
-                            </mat-cell>
+                      <table datatable class="row-border hover" id="oAcids"[dtOptions]="dtOptions">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Номер</th>
+                                <th>Значение</th>
+                                <th>Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let oAcid of oAcids">
+                                <td class="id_acid" >{{oAcid.id_oil}}</td>
+                                <td >{{oAcid.acid_name}}</td>
+                                <td >{{oAcid.acid_value}}</td>
 
-                          </ng-container>
-
-                          <ng-container matColumnDef="acid_name" >
-                            <mat-header-cell *matHeaderCellDef > name </mat-header-cell>
-                            <mat-cell *matCellDef="let oAcids"> {{oAcids.acid_name}} </mat-cell>
-                          </ng-container>
-
-                          <ng-container matColumnDef="acid_value">
-                            <mat-header-cell *matHeaderCellDef > full </mat-header-cell>
-                            <mat-cell *matCellDef="let oAcids"> {{oAcids.acid_value}} </mat-cell>
-                          </ng-container>
-
-
-                          <mat-header-row *matHeaderRowDef="oAcidColumns"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: oAcidColumns;"></mat-row>
+                                <td><div class="bothBtn">
+                                  <button (click)="onOpenOAcidModal('edit', oAcid)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                  <button (click)="onOpenOAcidModal('delete', oAcid)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                                </div></td>
+                          </tr>
+                        </tbody>
                         </table>
                     </div>
                     <div class="tab-pane fade" id="nav-po-acid" role="tabpanel" aria-labelledby="nav-po-acid-tab">

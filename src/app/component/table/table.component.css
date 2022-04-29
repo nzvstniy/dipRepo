@@ -365,19 +365,11 @@ p {
   font-weight: 600;
 }
 
-.mat-header-row{
-  min-width: 1110px;
-}
-.mat-cell{
-  min-height: 80px;
+.id_acid{
+  min-width: 150px;
 }
 
-.mat-column-id_acid:hover .bothBtn{
-  display:block;
-  position:absolute;
-  left:100px;
 
-}
 
 .addBtn{
   display:flex;
@@ -386,7 +378,7 @@ p {
 }
 
 .bothBtn{
-display: none;
+display: block;
 
 }
 

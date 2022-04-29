@@ -15,12 +15,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import { DataTablesModule } from "angular-datatables";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TableComponent,
+
 
   ],
   imports: [
@@ -33,7 +35,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DataTablesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
