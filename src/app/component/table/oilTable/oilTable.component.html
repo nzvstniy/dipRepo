@@ -1,0 +1,160 @@
+
+
+<main>
+
+  <section id="tabs" class="project-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div  id="nav-oil" aria-labelledby="nav-oil">
+                      <div class="addBtn">
+                      <button (click)="onOpenOilModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span> </button>
+                    </div>
+                    <table datatable class="row-border hover" id="oilAcids" [dtOptions]="dtOptions" >
+                      <thead>
+                          <tr>
+                              <th>ID</th>
+                              <th>Название</th>
+                              <th>Страна</th>
+                              <th>Производитель</th>
+                              <th>Сорт</th>
+                              <th>Описание</th>
+                              <th>Действие</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let oil of Oils">
+                              <td >{{oil.id_oil}}</td>
+                              <td >{{oil.oil_name}}</td>
+                              <td >{{oil.oil_country}}</td>
+                              <td >{{oil.oil_maker}}</td>
+                              <td >{{oil.oil_sort}}</td>
+                              <td class="big-col">{{oil.oil_note}}</td>
+                              <td><div class="bothBtn">
+                                <button (click)="onOpenOilModal('edit', oil)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                <button (click)="onOpenOilModal('delete', oil)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                              </div></td>
+                        </tr>
+                      </tbody>
+                      </table>
+
+                          <!-- Add Acid Modal -->
+    <div class="modal fade" id="addOilModal" tabindex="-1" role="dialog" aria-labelledby="addOilModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="addOilModalLabel">Добавить данные</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #addForm="ngForm" (ngSubmit)="onAddOil(addForm)">
+              <div class="form-group">
+                 <label for="oil_name">Название</label>
+                 <input type="text" ngModel name="oil_name" class="form-control" id="oil_name" placeholder="Название" required>
+              </div>
+              <div class="form-group">
+                 <label for="oil_country">Страна</label>
+                 <input type="text" ngModel name="oil_country" class="form-control" id="oil_country" placeholder="Страна" required>
+              </div>
+              <div class="form-group">
+                 <label for="oil_maker">Производитель</label>
+                 <input type="text" ngModel name="oil_maker" class="form-control" id="oil_maker" placeholder="Производитель" required>
+              </div>
+              <div class="form-group">
+                <label for="oil_sort">Сорт</label>
+                <input type="text" ngModel name="oil_sort" class="form-control" id="oil_sort" placeholder="Сорт" required>
+             </div>
+             <div class="form-group">
+              <label for="oil_note">Описание</label>
+              <input type="text" ngModel name="oil_note" class="form-control" id="oil_note" placeholder="Описание" required>
+           </div>
+              <div class="modal-footer">
+                <!--[disabled]="addForm.invalid"--><button  type="submit" class="btn btn-primary" >Сохранить</button>
+                 <button type="button" (click)="refresh()" id="add-oil-form" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              </div>
+              </form>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Acid -->
+    <div class="modal fade" id="editOilModal" tabindex="-1" role="dialog" aria-labelledby="oilEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updateOilModalLabel">Изменить {{editOils?.oil_name}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="oil_name">Название</label>
+                     <input type="text" ngModel="{{editOils?.oil_name}}" name="oil_name" class="form-control" id="oil_name" aria-describedby="oilHelp" placeholder="Название">
+                  </div>
+                  <input type="hidden" ngModel="{{editOils?.id_oil}}" name="id_oil" class="form-control" id="id_oil" placeholder="Id">
+                  <div class="form-group">
+                     <label for="oil_country">Страна</label>
+                     <input type="text" ngModel="{{editOils?.oil_country}}" name="oil_country" class="form-control" id="oil_country" placeholder="Страна">
+                  </div>
+                  <div class="form-group">
+                     <label for="oil_maker">Производитель</label>
+                     <input type="text" ngModel="{{editOils?.oil_maker}}" name="oil_maker" class="form-control" id="oil_maker" placeholder="Производитель">
+                  </div>
+                  <div class="form-group">
+                    <label for="oil_sort">Сорт</label>
+                    <input type="text" ngModel="{{editOils?.oil_sort}}" name="oil_sort" class="form-control" id="oil_sort" placeholder="Сорт">
+                 </div>
+                 <div class="form-group">
+                  <label for="oil_note">Описание</label>
+                  <input type="text" ngModel="{{editOils?.oil_note}}" name="oil_note" class="form-control" id="oil_note" placeholder="Описание">
+               </div>
+                  <div class="modal-footer">
+                     <button (click)="onUpdateOil(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
+                     <button type="button" (click)="refresh()" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+    </div>
+                      <!--Delete Acid-->
+                      <div class="modal fade" id="deleteOilModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="deleteModelLabel">Удалить</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 <p>Удалить "{{deleteOils?.oil_name}}"?</p>
+                                 <div class="modal-footer">
+                                    <button (click)="onDeleteOil(deleteOils!.id_oil)" class="btn btn-danger" data-dismiss="modal">Да</button>
+                                    <button type="button" class="btn btn-secondary" (click)="refresh()" data-dismiss="modal">Нет</button>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+              </div>
+            </div>
+        </div>
+
+</section>
+
+  </main>
+

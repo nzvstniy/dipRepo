@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
-import { TableComponent } from './component/table/table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from "@angular/material/input";
 import { MatTableModule } from '@angular/material/table';
@@ -16,12 +15,22 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { DataTablesModule } from "angular-datatables";
+import { AcidTableComponent } from './component/table/acidTable/acidTable.component';
+import { OilAcidTableComponent } from './component/table/oilAcidTable/oilAcidTable.component';
+import { OilTableComponent } from './component/table/oilTable/oilTable.component';
+import { PlantOilAcidTableComponent } from './component/table/plantOilAcidTable/plantOilAcidTable.component';
+import { PlantOilTableComponent } from './component/table/plantOilTable/plantOilTable.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    TableComponent,
+    AcidTableComponent,
+    OilAcidTableComponent,
+    OilTableComponent,
+    PlantOilTableComponent,
+    PlantOilAcidTableComponent
+
 
 
   ],

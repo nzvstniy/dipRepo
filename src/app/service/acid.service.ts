@@ -18,12 +18,12 @@ export class AcidService{
     return this.http.get<Acid[]>(`${this.apiServerUrl}/table/acid/all`);
   }
 
-  public addAcid(acids: Acid): Observable<Acid> {
-    return this.http.post<Acid>(`${this.apiServerUrl}/table/acid/add`, acids);
+  public addAcid(Acids: Acid): Observable<Acid> {
+    return this.http.post<Acid>(`${this.apiServerUrl}/table/acid/add`, Acids);
   }
 
-  public updateAcid(acids: Acid): Observable<Acid> {
-    return this.http.put<Acid>(`${this.apiServerUrl}/table/acid/update`, acids);
+  public updateAcid(Acids: Acid): Observable<Acid> {
+    return this.http.put<Acid>(`${this.apiServerUrl}/table/acid/update`, Acids);
   }
 
   public deleteAcid(id_acid: number): Observable<void> {

@@ -16,12 +16,12 @@ export class OilService{
   public getOil(): Observable<Oil[]> {
     return this.http.get<Oil[]>(`${this.apiServerUrl}/table/oil/all`);
   }
-  public addOil(oils: Oil): Observable<Oil> {
-    return this.http.post<Oil>(`${this.apiServerUrl}/table/oil/add`, oils);
+  public addOil(Oils: Oil): Observable<Oil> {
+    return this.http.post<Oil>(`${this.apiServerUrl}/table/oil/add`, Oils);
   }
 
-  public updateOil(oils: Oil): Observable<Oil> {
-    return this.http.put<Oil>(`${this.apiServerUrl}/table/oil/update`, oils);
+  public updateOil(Oils: Oil): Observable<Oil> {
+    return this.http.put<Oil>(`${this.apiServerUrl}/table/oil/update`, Oils);
   }
 
   public deleteOil(id_oil: number): Observable<void> {

@@ -1,0 +1,151 @@
+
+
+<main>
+
+  <section id="tabs" class="project-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div  id="nav-plant-oil-acid" aria-labelledby="nav-plant-oil-acid-tab">
+                      <div class="addBtn">
+                      <button (click)="onOpenPlantOilAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span> </button>
+                    </div>
+                    <table datatable class="row-border hover" id="plantOilAcids" [dtOptions]="dtOptions" >
+                      <thead>
+                          <tr>
+                              <th>ID</th>
+                              <th>ID масла</th>
+                              <th>Название</th>
+                              <th>Минимальное содержание</th>
+                              <th>Максимальное содержание</th>
+                              <th>Действие</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let plantOilAcid of PlantOilAcids">
+                              <td >{{plantOilAcid.id_acid_plant}}</td>
+                              <td >{{plantOilAcid.id_plants}}</td>
+                              <td >{{plantOilAcid.name_acids}}</td>
+                              <td >{{plantOilAcid.fat_acid_content_min}}</td>
+                              <td class="big-col">{{plantOilAcid.fat_acid_content_max}}</td>
+                              <td><div class="bothBtn">
+                                <button (click)="onOpenPlantOilAcidModal('edit', plantOilAcid)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                <button (click)="onOpenPlantOilAcidModal('delete', plantOilAcid)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                              </div></td>
+                        </tr>
+                      </tbody>
+                      </table>
+
+                          <!-- Add Acid Modal -->
+    <div class="modal fade" id="addPlantOilAcidModal" tabindex="-1" role="dialog" aria-labelledby="addPlantOilAcidModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="addPlantOilAcidModalLabel">Добавить данные</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #addForm="ngForm" (ngSubmit)="onAddPlantOilAcid(addForm)">
+              <div class="form-group">
+                 <label for="id_plants">ID масла</label>
+                 <input type="text" ngModel name="id_plants" class="form-control" id="id_plants" placeholder="ID масла" required>
+              </div>
+              <div class="form-group">
+                 <label for="name_acids">Название</label>
+                 <input type="text" ngModel name="name_acids" class="form-control" id="name_acids" placeholder="Название" required>
+              </div>
+              <div class="form-group">
+                 <label for="fat_acid_content_min">Минимальное содержание</label>
+                 <input type="text" ngModel name="fat_acid_content_min" class="form-control" id="fat_acid_content_min" placeholder="Минимальное содержание" required>
+              </div>
+              <div class="form-group">
+                <label for="fat_acid_content_max">Максимальное содержание</label>
+                <input type="text" ngModel name="fat_acid_content_max" class="form-control" id="fat_acid_content_max" placeholder="Максимальное содержание" required>
+             </div>
+              <div class="modal-footer">
+                <!--[disabled]="addForm.invalid"--><button  type="submit" class="btn btn-primary" >Сохранить</button>
+                 <button type="button" (click)="refresh()" id="add-plant-oil-acid-form" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              </div>
+              </form>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Acid -->
+    <div class="modal fade" id="editPlantOilAcidModal" tabindex="-1" role="dialog" aria-labelledby="plantOilAcidEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updatePlantOilAcidModalLabel">Изменить {{editPlantOilAcids?.name_acids}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="id_plants">ID масла</label>
+                     <input type="text" ngModel="{{editPlantOilAcids?.id_plants}}" name="id_plants" class="form-control" id="id_plants" aria-describedby="plantOilAcidHelp" placeholder="ID масла">
+                  </div>
+                  <input type="hidden" ngModel="{{editPlantOilAcids?.id_acid_plant}}" name="id_acid_plant" class="form-control" id="id_acid_plant" placeholder="Id">
+                  <div class="form-group">
+                     <label for="name_acids">Название</label>
+                     <input type="text" ngModel="{{editPlantOilAcids?.name_acids}}" name="name_acids" class="form-control" id="name_acids" placeholder="Название">
+                  </div>
+                  <div class="form-group">
+                     <label for="fat_acid_content_min">Минимальное содержание</label>
+                     <input type="text" ngModel="{{editPlantOilAcids?.fat_acid_content_min}}" name="fat_acid_content_min" class="form-control" id="fat_acid_content_min" placeholder="Минимальное содержание">
+                  </div>
+                  <div class="form-group">
+                    <label for="fat_acid_content_max">Максимальное содержание</label>
+                    <input type="text" ngModel="{{editPlantOilAcids?.fat_acid_content_max}}" name="fat_acid_content_max" class="form-control" id="fat_acid_content_max" placeholder="Максимальное содержание">
+                 </div>
+
+                  <div class="modal-footer">
+                     <button (click)="onUpdatePlantOilAcid(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
+                     <button type="button" (click)="refresh()" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+    </div>
+                      <!--Delete Acid-->
+                      <div class="modal fade" id="deletePlantOilAcidModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="deleteModelLabel">Удалить</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 <p>Удалить "{{deletePlantOilAcids?.name_acids}}"?</p>
+                                 <div class="modal-footer">
+                                    <button (click)="onDeletePlantOilAcid(deletePlantOilAcids!.id_acid_plant)" class="btn btn-danger" data-dismiss="modal">Да</button>
+                                    <button type="button" (click)="refresh()" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+              </div>
+            </div>
+        </div>
+
+</section>
+
+  </main>
+

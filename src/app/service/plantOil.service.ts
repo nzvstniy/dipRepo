@@ -16,12 +16,12 @@ export class PlantOilService{
   public getPlantOil(): Observable<PlantOil[]> {
     return this.http.get<PlantOil[]>(`${this.apiServerUrl}/table/plantOil/all`);
   }
-  public addPlantOil(plantOils: PlantOil): Observable<PlantOil> {
-    return this.http.post<PlantOil>(`${this.apiServerUrl}/table/plantOil/add`, plantOils);
+  public addPlantOil(PlantOils: PlantOil): Observable<PlantOil> {
+    return this.http.post<PlantOil>(`${this.apiServerUrl}/table/plantOil/add`, PlantOils);
   }
 
-  public updatePlantOil(plantOils: PlantOil): Observable<PlantOil> {
-    return this.http.put<PlantOil>(`${this.apiServerUrl}/table/plantOil/update`, plantOils);
+  public updatePlantOil(PlantOils: PlantOil): Observable<PlantOil> {
+    return this.http.put<PlantOil>(`${this.apiServerUrl}/table/plantOil/update`, PlantOils);
   }
 
   public deletePlantOil(id_plant_oil: number): Observable<void> {

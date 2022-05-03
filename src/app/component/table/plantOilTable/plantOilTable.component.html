@@ -1,0 +1,131 @@
+
+
+<main>
+
+  <section id="tabs" class="project-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div  id="nav-plant-oil" aria-labelledby="nav-plant-oil-tab">
+                      <div class="addBtn">
+                      <button (click)="onOpenPlantOilModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span> </button>
+                    </div>
+                    <table datatable class="row-border hover" id="oilAcids" [dtOptions]="dtOptions" >
+                      <thead>
+                          <tr>
+                              <th>ID</th>
+                              <th>Название</th>
+                              <th>Описание</th>
+                              <th>Действие</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let plantOil of PlantOils">
+                              <td >{{plantOil.id_plant_oil}}</td>
+                              <td >{{plantOil.plant_oil_name}}</td>
+                              <td class="big-col">{{plantOil.plant_oil_description}}</td>
+                              <td><div class="bothBtn">
+                                <button (click)="onOpenPlantOilModal('edit', plantOil)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                <button (click)="onOpenPlantOilModal('delete', plantOil)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                              </div></td>
+                        </tr>
+                      </tbody>
+                      </table>
+
+                          <!-- Add Acid Modal -->
+    <div class="modal fade" id="addPlantOilModal" tabindex="-1" role="dialog" aria-labelledby="addPlantOilModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="addPlantOilModalLabel">Добавить данные</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #addForm="ngForm" (ngSubmit)="onAddPlantOil(addForm)">
+              <div class="form-group">
+                 <label for="plant_oil_name">Название</label>
+                 <input type="text" ngModel name="plant_oil_name" class="form-control" id="plant_oil_name" placeholder="Название" required>
+              </div>
+              <div class="form-group">
+                 <label for="plant_oil_description">Описание</label>
+                 <input type="text" ngModel name="plant_oil_description" class="form-control" id="plant_oil_description" placeholder="Описание" required>
+              </div>
+              <div class="modal-footer">
+                <!--[disabled]="addForm.invalid"--><button  type="submit" class="btn btn-primary" >Сохранить</button>
+                 <button type="button" id="add-plant-oil-acid-form" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              </div>
+              </form>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Acid -->
+    <div class="modal fade" id="editPlantOilModal" tabindex="-1" role="dialog" aria-labelledby="oilEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updatePlantOilModalLabel">Изменить {{editPlantOils?.plant_oil_name}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="plant_oil_name">Название</label>
+                     <input type="text" ngModel="{{editPlantOils?.plant_oil_name}}" name="plant_oil_name" class="form-control" id="plant_oil_name" aria-describedby="plantOilHelp" placeholder="Название">
+                  </div>
+                  <input type="hidden" ngModel="{{editPlantOils?.id_plant_oil}}" name="id_plant_oil" class="form-control" id="id_plant_oil" placeholder="Id">
+                  <div class="form-group">
+                     <label for="plant_oil_description">Описание</label>
+                     <input type="text" ngModel="{{editPlantOils?.plant_oil_description}}" name="plant_oil_description" class="form-control" id="plant_oil_description" placeholder="Описание">
+                  </div>
+
+                  <div class="modal-footer">
+                     <button (click)="onUpdatePlantOil(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
+                     <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+    </div>
+                      <!--Delete Acid-->
+                      <div class="modal fade" id="deletePlantOilModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="deleteModelLabel">Удалить</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 <p>Удалить "{{deletePlantOils?.plant_oil_name}}"?</p>
+                                 <div class="modal-footer">
+                                    <button (click)="onDeletePlantOil(deletePlantOils!.id_plant_oil)" class="btn btn-danger" data-dismiss="modal">Да</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+              </div>
+            </div>
+        </div>
+
+</section>
+
+  </main>
+

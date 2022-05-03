@@ -1,0 +1,142 @@
+
+
+
+
+<main >
+
+  <section id="tabs" class="project-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="tab-content" id="nav-tabContent">
+                    <div id="nav-acid" aria-labelledby="nav-acid-tab">
+                      <div class="addBtn">
+                      <button (click)="onOpenAcidModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span> </button>
+                    </div>
+
+                    <table datatable class="row-border hover" id="acids" [dtOptions]="dtOptions" >
+                      <thead>
+                          <tr>
+                              <th>ID</th>
+                              <th>Номер</th>
+                              <th>Название</th>
+                              <th>Описание</th>
+                              <th>Действие</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let acid of Acids">
+                              <td >{{acid.id_acid}}</td>
+                              <td >{{acid.acid_name}}</td>
+                              <td >{{acid.acid_full_name}}</td>
+                              <td class="big-col">{{acid.acid_description}}</td>
+                              <td><div class="bothBtn">
+                                <button (click)="onOpenAcidModal('edit', acid)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                <button (click)="onOpenAcidModal('delete', acid)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                              </div></td>
+                        </tr>
+                      </tbody>
+                      </table>
+
+                          <!-- Add Acid Modal -->
+    <div class="modal fade" id="addAcidModal" tabindex="-1" role="dialog" aria-labelledby="addAcidModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="addAcidModalLabel">Добавить данные</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #addForm="ngForm" (ngSubmit)="onAddAcid(addForm)">
+              <div class="form-group">
+                 <label for="acid_name">Номер</label>
+                 <input type="text" ngModel name="acid_name" class="form-control" id="acid_name" placeholder="Номер" required>
+              </div>
+              <div class="form-group">
+                 <label for="acid_full_name">Название</label>
+                 <input type="text" ngModel name="acid_full_name" class="form-control" id="acid_full_name" placeholder="Название" required>
+              </div>
+              <div class="form-group">
+                 <label for="acid_description">Описание</label>
+                 <input type="text" ngModel name="acid_description" class="form-control" id="acid_description" placeholder="Описание" required>
+              </div>
+              <div class="modal-footer">
+                <!--[disabled]="addForm.invalid"--><button  type="submit" class="btn btn-primary" >Сохранить</button>
+                 <button type="button" (click)="refresh()" id="add-acid-form" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              </div>
+              </form>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Acid -->
+    <div class="modal fade" id="editAcidModal" tabindex="-1" role="dialog" aria-labelledby="acidEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updateAcidModalLabel">Изменить {{editAcids?.acid_full_name}}</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="acid_full_name">Название</label>
+                     <input type="text" ngModel="{{editAcids?.acid_full_name}}" name="acid_full_name" class="form-control" id="acid_full_name" aria-describedby="acidFullNameHelp" placeholder="Название">
+                  </div>
+                  <input type="hidden" ngModel="{{editAcids?.id_acid}}" name="id_acid" class="form-control" id="id_acid" placeholder="Id">
+                  <div class="form-group">
+                     <label for="acid_name">Номер</label>
+                     <input type="text" ngModel="{{editAcids?.acid_name}}" name="acid_name" class="form-control" id="acid_name" placeholder="Номер">
+                  </div>
+                  <div class="form-group">
+                     <label for="acid_description">Описание</label>
+                     <input type="text" ngModel="{{editAcids?.acid_description}}" name="acid_description" class="form-control" id="acid_description" placeholder="Описание">
+                  </div>
+                  <div class="modal-footer">
+                     <button (click)="onUpdateAcid(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
+                     <button type="button" (click)="refresh()" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+    </div>
+                      <!--Delete Acid-->
+                      <div class="modal fade" id="deleteAcidModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h5 class="modal-title" id="deleteModelLabel">Удалить</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <div class="modal-body">
+                                 <p>Удалить "{{deleteAcids?.acid_full_name}}"?</p>
+                                 <div class="modal-footer">
+                                    <button (click)="onDeleteAcid(deleteAcids!.id_acid)" class="btn btn-danger" data-dismiss="modal">Да</button>
+                                    <button type="button" (click)="refresh()" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                                  </div>
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+              </div>
+            </div>
+        </div>
+
+</section>
+
+  </main>
+
