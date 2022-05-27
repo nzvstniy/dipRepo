@@ -29,4 +29,5 @@ export class AcidService{
   public deleteAcid(id_acid: number): Observable<void> {
     return this.http.delete<void>(`${this.apiServerUrl}/table/acid/delete/${id_acid}`);
   }
+
 }

@@ -1,8 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Oil } from 'src/app/interface/tableInterface/oil';
 import { OilService } from 'src/app/service/oil.service';
+import * as xlsx from 'xlsx';
 
 @Component({
   selector: 'app-oilTable',
@@ -15,46 +19,35 @@ export class OilTableComponent implements OnInit {
   public Oils: Oil[] = [];
   public editOils: Oil | undefined;
   public deleteOils: Oil | undefined;
-  dtOptions: DataTables.Settings={};
-  refresh(): void {
-    window.location.reload();
-  };
+
+  displayedColumns: string[] = ['id_oil', 'oil_name', 'oil_country', 'oil_maker', 'oil_sort', 'oil_note','clean'];
+  dataSource = new MatTableDataSource<Oil>();
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  fileName= 'ExportedOil.xlsx';
+
   constructor( private oilService: OilService) { }
 
   ngOnInit() {
     this.getOil();
-    this.dtOptions = {
-      pagingType: 'first_last_numbers',
-      pageLength: 5,
-      processing: true,
-      "language": {
-        "info": "Показано _PAGE_ из _PAGES_ страниц.",
-        "infoEmpty":"Не найдено.",
-        "zeroRecords":"Нет записей.",
-        "infoFiltered": "Отфильтровано по _MAX_.",
-        "lengthMenu": 'Показать <select>'+
-                    '<option value="5">5</option>'+
-                    '<option value="10">10</option>'+
-                    '<option value="20">20</option>'+
-                    '<option value="30">30</option>'+
-                    '<option value="40">40</option>'+
-                    '<option value="50">50</option>'+
-                    '<option value="-1">Все</option>'+
-                    '</select> записей',
-          "search": "Поиск:",
-          "paginate": {
-            "first": "Первая",
-            "last":"Последняя",
-            "next":"",
-            "previous":""
-          }
-        }
-    }
   }
+
+  exportToExcel():void {
+    const ws: xlsx.WorkSheet =xlsx.utils.json_to_sheet(this.dataSource.data);
+
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    xlsx.writeFile(wb, this.fileName);
+   }
+
   public getOil(): void {
     this.oilService.getOil().subscribe({
       next: (response: Oil[]) => {
-        this.Oils = response;
+        this.dataSource.data = response;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
@@ -75,7 +68,7 @@ export class OilTableComponent implements OnInit {
       button.setAttribute('data-target', '#deleteOilModal');
     } else if (mode === 'edit') {
       this.editOils = Oils;
-      button.setAttribute('data-target', '#editAcidModal');
+      button.setAttribute('data-target', '#editOilModal');
     }
 
     container?.appendChild(button);
@@ -88,11 +81,9 @@ export class OilTableComponent implements OnInit {
       next: (response: Oil) => {
         console.log(response);
         this.getOil();
-        this.refresh();
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
-        addForm.reset();
       }
     })
   }
@@ -105,7 +96,6 @@ export class OilTableComponent implements OnInit {
       next: (response: Oil) => {
         console.log(response);
         this.getOil();
-        this.refresh();
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
@@ -118,7 +108,6 @@ export class OilTableComponent implements OnInit {
       next: (response: void) => {
         console.log(response);
         this.getOil();
-        this.refresh();
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);

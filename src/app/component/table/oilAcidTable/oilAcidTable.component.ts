@@ -1,8 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { OilAcid } from 'src/app/interface/tableInterface/oilAcid';
 import { OilAcidService } from 'src/app/service/oilAcid.service';
+import * as xlsx from 'xlsx';
 
 @Component({
   selector: 'app-oilAcidTable',
@@ -11,51 +16,43 @@ import { OilAcidService } from 'src/app/service/oilAcid.service';
 })
 @Injectable()
 export class OilAcidTableComponent implements OnInit {
-
   public OilAcids: OilAcid[] = [];
   public editOilAcids: OilAcid | undefined;
   public deleteOilAcids: OilAcid | undefined;
-  dtOptions: DataTables.Settings={};
-  refresh(): void {
-    window.location.reload();
-  };
-  constructor( private oilAcidService: OilAcidService,) { }
+
+  displayedColumns: string[] = ['id_acid_oil', 'id_oils', 'name_acids', 'acid_value','clean'];
+  dataSource = new MatTableDataSource<OilAcid>();
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+
+  fileName= 'ExportedOilAcid.xlsx';
+
+  constructor( private oilAcidService: OilAcidService) { }
 
   ngOnInit() {
     this.getOilAcid();
-    this.dtOptions = {
-      pagingType: 'first_last_numbers',
-      pageLength: 5,
-      processing: true,
-      "language": {
-        "info": "Показано _PAGE_ из _PAGES_ страниц.",
-        "infoEmpty":"Не найдено.",
-        "zeroRecords":"Нет записей.",
-        "infoFiltered": "Отфильтровано по _MAX_.",
-        "lengthMenu": 'Показать <select>'+
-                    '<option value="5">5</option>'+
-                    '<option value="10">10</option>'+
-                    '<option value="20">20</option>'+
-                    '<option value="30">30</option>'+
-                    '<option value="40">40</option>'+
-                    '<option value="50">50</option>'+
-                    '<option value="-1">Все</option>'+
-                    '</select> записей',
-          "search": "Поиск:",
-          "paginate": {
-            "first": "Первая",
-            "last":"Последняя",
-            "next":"",
-            "previous":""
-          }
-        }
+
+
+
   }
 
-}
+exportToExcel():void {
+  const ws: xlsx.WorkSheet =xlsx.utils.json_to_sheet(this.dataSource.data);
+
+  const wb: xlsx.WorkBook = xlsx.utils.book_new();
+
+  xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  xlsx.writeFile(wb, this.fileName);
+ }
+
+
 public getOilAcid(): void {
   this.oilAcidService.getOilAcid().subscribe({
     next: (response: OilAcid[]) => {
-      this.OilAcids = response;
+      this.dataSource.data = response;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
 
     },
     error: (error: HttpErrorResponse) => {
@@ -89,7 +86,8 @@ public onAddOilAcid(addForm: NgForm): void {
     next: (response: OilAcid) => {
       console.log(response);
       this.getOilAcid();
-      this.refresh();
+      addForm.reset();
+
     },
     error: (error: HttpErrorResponse) => {
       alert(error.message);
@@ -106,7 +104,6 @@ public onUpdateOilAcid(OilAcids: OilAcid): void {
     next: (response: OilAcid) => {
       console.log(response);
       this.getOilAcid();
-      this.refresh();
     },
     error: (error: HttpErrorResponse) => {
       alert(error.message);
@@ -119,11 +116,11 @@ public onDeleteOilAcid(id_acid_oil: number): void {
     next: (response: void) => {
       console.log(response);
       this.getOilAcid();
-      this.refresh();
     },
     error: (error: HttpErrorResponse) => {
       alert(error.message);
     }
   })
 }
+
 }

@@ -10,9 +10,85 @@
 
                 <div class="tab-content" id="nav-tabContent">
                     <div  id="nav-oil" aria-labelledby="nav-oil">
-                      <div class="addBtn">
-                      <button (click)="onOpenOilModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span> </button>
+                      <mat-toolbar color="primary">
+                        <button class="menuSet" mat-icon-button [matMenuTriggerFor]="tableAction" aria-label="Action for tables">
+                          <mat-icon>settings</mat-icon>
+                        </button>
+                        <mat-menu #tableAction="matMenu">
+
+                          <button mat-menu-item (click)="onOpenOilModal('add')">
+                            <mat-icon>add_circle</mat-icon>
+                            <span>Добавить</span>
+                            <span class="sr-only">(current)</span>
+                          </button>
+
+                          <button mat-menu-item (click)="exportToExcel()">
+                            <mat-icon>launch</mat-icon>
+                            <span>Экспорт в Excel</span>
+                          </button>
+                        </mat-menu>
+                       <span>Тут будет название таблицы</span>
+                     </mat-toolbar>
+
+                    <div class="mat-elevation-z8">
+                      <table mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="id_oil">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> ID </th>
+                          <td mat-cell *matCellDef="let oil"> {{oil.id_oil}}
+                           </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oil_name">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> Название </th>
+                          <td mat-cell *matCellDef="let oil"> {{oil.oil_name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oil_country">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> Страна </th>
+                          <td mat-cell *matCellDef="let oil"> {{oil.oil_country}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oil_maker">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> Производитель </th>
+                          <td mat-cell *matCellDef="let oil"> {{oil.oil_maker}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oil_sort">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> Сорт </th>
+                          <td mat-cell *matCellDef="let oil"> {{oil.oil_sort}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oil_note">
+                          <th mat-header-cell *matHeaderCellDef> Описание </th>
+                          <td class="big-col" mat-cell *matCellDef="let oil"> {{oil.oil_note}}
+
+                          </td>
+                        </ng-container>
+                        <ng-container matColumnDef="clean">
+                          <th mat-header-cell *matHeaderCellDef> </th>
+                          <td mat-cell *matCellDef="let oil">
+                            <button class="icon-pos" mat-icon-button [matMenuTriggerFor]="menu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                              <mat-menu  #menu="matMenu">
+                              <div >
+                                <button mat-menu-item (click)="onOpenOilModal('edit', oil)"  data-placement="top" data-toggle="tooltip" data-original-title="Edit"> Изменить</button>
+                                <button mat-menu-item (click)="onOpenOilModal('delete', oil)" data-placement="top" data-toggle="tooltip" data-original-title="Delete">Удалить</button>
+                              </div>
+                            </mat-menu>
+                          </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                      </table>
+                      <mat-paginator
+                      [pageSizeOptions]="[5, 10, 20, 100]"
+                                     showFirstLastButtons
+                                     aria-label="Select page of periodic elements">
+                      </mat-paginator>
                     </div>
+                    <!--
                     <table datatable class="row-border hover" id="oilAcids" [dtOptions]="dtOptions" >
                       <thead>
                           <tr>
@@ -22,25 +98,25 @@
                               <th>Производитель</th>
                               <th>Сорт</th>
                               <th>Описание</th>
-                              <th>Действие</th>
                           </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let oil of Oils">
+                        <tr class="btnShow" *ngFor="let oil of Oils">
                               <td >{{oil.id_oil}}</td>
                               <td >{{oil.oil_name}}</td>
                               <td >{{oil.oil_country}}</td>
                               <td >{{oil.oil_maker}}</td>
                               <td >{{oil.oil_sort}}</td>
-                              <td class="big-col">{{oil.oil_note}}</td>
-                              <td><div class="bothBtn">
-                                <button (click)="onOpenOilModal('edit', oil)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
-                                <button (click)="onOpenOilModal('delete', oil)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
-                              </div></td>
+                              <td class="big-col">{{oil.oil_note}}
+                                <div class="bothBtn">
+                                  <button (click)="onOpenOilModal('edit', oil)" class="btn btn-primary tooltips mr-3" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                  <button (click)="onOpenOilModal('delete', oil)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                                </div>
+                              </td>
                         </tr>
                       </tbody>
                       </table>
-
+-->
                           <!-- Add Acid Modal -->
     <div class="modal fade" id="addOilModal" tabindex="-1" role="dialog" aria-labelledby="addOilModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -75,7 +151,7 @@
            </div>
               <div class="modal-footer">
                 <!--[disabled]="addForm.invalid"--><button  type="submit" class="btn btn-primary" >Сохранить</button>
-                 <button type="button" (click)="refresh()" id="add-oil-form" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                 <button type="button"  id="add-oil-form" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
               </div>
               </form>
            </div>
@@ -118,7 +194,7 @@
                </div>
                   <div class="modal-footer">
                      <button (click)="onUpdateOil(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
-                     <button type="button" (click)="refresh()" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                     <button type="button"  id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
                   </div>
                </form>
             </div>
@@ -139,7 +215,7 @@
                                  <p>Удалить "{{deleteOils?.oil_name}}"?</p>
                                  <div class="modal-footer">
                                     <button (click)="onDeleteOil(deleteOils!.id_oil)" class="btn btn-danger" data-dismiss="modal">Да</button>
-                                    <button type="button" class="btn btn-secondary" (click)="refresh()" data-dismiss="modal">Нет</button>
+                                    <button type="button" class="btn btn-secondary"  data-dismiss="modal">Нет</button>
                                   </div>
                               </div>
                            </div>

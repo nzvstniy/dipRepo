@@ -1,10 +1,13 @@
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Injectable, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injectable, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Acid } from 'src/app/interface/tableInterface/acid';
 import { AcidService } from 'src/app/service/acid.service';
-
+import * as xlsx from 'xlsx';
 @Component({
   selector: 'app-acidTable',
   templateUrl: './acidTable.component.html',
@@ -17,64 +20,50 @@ export class AcidTableComponent implements OnInit {
   public Acids: Acid[] = [];
   public editAcids: Acid | undefined;
   public deleteAcids: Acid | undefined;
-  dtOptions: DataTables.Settings={};
 
-  refresh(): void {
-    window.location.reload();
-  };
+  displayedColumns: string[] = ['id_acid', 'acid_name', 'acid_full_name', 'acid_description', 'clean'];
+  dataSource = new MatTableDataSource<Acid>();
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+
+  fileName= 'ExportedAcid.xlsx';
 
 
-
-  constructor(private acidService: AcidService, private router:Router) {
+  constructor(private acidService: AcidService) {
 
    }
 
   ngOnInit() {
-
-
     this.getAcid();
-    this.dtOptions = {
-      pagingType: 'first_last_numbers',
-      pageLength: 5,
-      processing: true,
-      "language": {
-        "info": "Показано _PAGE_ из _PAGES_ страниц.",
-        "infoEmpty":"Не найдено.",
-        "zeroRecords":"Нет записей.",
-        "infoFiltered": "Отфильтровано по _MAX_.",
-        "lengthMenu": 'Показать <select>'+
-                    '<option value="5">5</option>'+
-                    '<option value="10">10</option>'+
-                    '<option value="20">20</option>'+
-                    '<option value="30">30</option>'+
-                    '<option value="40">40</option>'+
-                    '<option value="50">50</option>'+
-                    '<option value="-1">Все</option>'+
-                    '</select> записей',
-          "search": "Поиск:",
-          "paginate": {
-            "first": "Первая",
-            "last":"Последняя",
-            "next":"",
-            "previous":""
-          }
-        }
-      }
+
   }
 
+  exportToExcel():void {
+    const ws: xlsx.WorkSheet =xlsx.utils.json_to_sheet(this.dataSource.data);
 
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    xlsx.writeFile(wb, this.fileName);
+   }
 
   public getAcid(): void {
     this.acidService.getAcid().subscribe({
       next: (response: Acid[]) => {
-        this.Acids = response;
-
+        this.dataSource.data = response;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
+
       error: (error: HttpErrorResponse) => {
         alert(error.message);
-      }
+      },
+
     })
   }
+
+
 
   public onOpenAcidModal(mode: string, Acids?: Acid): void {
     const container = document.getElementById('nav-acid');
@@ -102,7 +91,8 @@ export class AcidTableComponent implements OnInit {
       next: (response: Acid) => {
         console.log(response);
         this.getAcid();
-        this.refresh();
+        addForm.reset();
+
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
@@ -120,7 +110,6 @@ export class AcidTableComponent implements OnInit {
       next: (response: Acid) => {
         console.log(response);
         this.getAcid();
-        this.refresh();
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
@@ -133,12 +122,12 @@ export class AcidTableComponent implements OnInit {
       next: (response: void) => {
         console.log(response);
         this.getAcid();
-        this.refresh();
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
       }
     })
   }
+
 
 }

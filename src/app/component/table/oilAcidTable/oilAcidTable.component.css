@@ -365,22 +365,53 @@ p {
   font-weight: 600;
 }
 
-
 .big-col{
   min-width: 130px;
 }
 
-
-
 .addBtn{
   display:flex;
   position: absolute;
-  left: -130px;
+  left: -140px;
+}
+
+.btnShow:hover .bothBtn{
+  display: inline;
+
+}
+.small-col{
+  width:50px;
+}
+.excelBtn{
+  display:flex;
+  position: absolute;
+  left: -140px;
+  top: 50px;
+}
+.icon-pos{
+  border: none;
+  background: none;
+}
+.column-width{
+  width:100em;
+  height: 100px;
+}
+.menuSet{
+  border: none;
+  background: none;
+  color:white
+}
+.mat-icon {
+  vertical-align: middle;
+}
+td{
+  height: 80px;
+  width: 200px;
 }
 
 .bothBtn{
-display: block;
-
+display:none;
+width:100px;
 }
 
 

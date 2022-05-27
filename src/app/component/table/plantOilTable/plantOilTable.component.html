@@ -10,31 +10,93 @@
 
                 <div class="tab-content" id="nav-tabContent">
                     <div  id="nav-plant-oil" aria-labelledby="nav-plant-oil-tab">
-                      <div class="addBtn">
-                      <button (click)="onOpenPlantOilModal('add')" class="btn btn-info tooltips">Добавить <span class="sr-only">(current)</span> </button>
+                      <mat-toolbar color="primary">
+                        <button class="menuSet" mat-icon-button [matMenuTriggerFor]="tableAction" aria-label="Action for tables">
+                          <mat-icon>settings</mat-icon>
+                        </button>
+                        <mat-menu #tableAction="matMenu">
+
+                          <button mat-menu-item (click)="onOpenPlantOilModal('add')">
+                            <mat-icon>add_circle</mat-icon>
+                            <span>Добавить</span>
+                            <span class="sr-only">(current)</span>
+                          </button>
+
+                          <button mat-menu-item (click)="exportToExcel()">
+                            <mat-icon>launch</mat-icon>
+                            <span>Экспорт в Excel</span>
+                          </button>
+                        </mat-menu>
+                       <span>Тут будет название таблицы</span>
+                     </mat-toolbar>
+                    <div class="mat-elevation-z8">
+                      <table mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="id_plant_oil">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> ID </th>
+                          <td mat-cell *matCellDef="let plantOil"> {{plantOil.id_plant_oil}}
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="plant_oil_name">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef> Название </th>
+                          <td mat-cell *matCellDef="let plantOil"> {{plantOil.plant_oil_name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="plant_oil_description">
+                          <th mat-header-cell *matHeaderCellDef> Описание </th>
+                          <td class="big-col" mat-cell *matCellDef="let plantOil"> {{plantOil.plant_oil_description}}
+
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="clean">
+                          <th mat-header-cell *matHeaderCellDef> </th>
+                          <td mat-cell *matCellDef="let plantOil">
+                            <button class="icon-pos" mat-icon-button [matMenuTriggerFor]="menu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                              <mat-menu  #menu="matMenu">
+                              <div >
+                                <button mat-menu-item (click)="onOpenPlantOilModal('edit', plantOil)"  data-placement="top" data-toggle="tooltip" data-original-title="Edit"> Изменить</button>
+                                <button mat-menu-item (click)="onOpenPlantOilModal('delete', plantOil)" data-placement="top" data-toggle="tooltip" data-original-title="Delete">Удалить</button>
+                              </div>
+                            </mat-menu>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                      </table>
+                      <mat-paginator
+                      [pageSizeOptions]="[5, 10, 20, 100]"
+                                     showFirstLastButtons
+                                     aria-label="Select page of periodic elements">
+                      </mat-paginator>
                     </div>
+                    <!--
                     <table datatable class="row-border hover" id="oilAcids" [dtOptions]="dtOptions" >
                       <thead>
                           <tr>
                               <th>ID</th>
                               <th>Название</th>
                               <th>Описание</th>
-                              <th>Действие</th>
                           </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let plantOil of PlantOils">
+                        <tr class="btnShow" *ngFor="let plantOil of PlantOils">
                               <td >{{plantOil.id_plant_oil}}</td>
                               <td >{{plantOil.plant_oil_name}}</td>
-                              <td class="big-col">{{plantOil.plant_oil_description}}</td>
-                              <td><div class="bothBtn">
-                                <button (click)="onOpenPlantOilModal('edit', plantOil)" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
-                                <button (click)="onOpenPlantOilModal('delete', plantOil)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
-                              </div></td>
+                              <td class="big-col">{{plantOil.plant_oil_description}}
+                                <div class="bothBtn">
+                                  <button (click)="onOpenPlantOilModal('edit', plantOil)" class="btn btn-primary tooltips mr-3" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
+                                  <button (click)="onOpenPlantOilModal('delete', plantOil)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+                                </div>
+                              </td>
                         </tr>
                       </tbody>
                       </table>
-
+-->
                           <!-- Add Acid Modal -->
     <div class="modal fade" id="addPlantOilModal" tabindex="-1" role="dialog" aria-labelledby="addPlantOilModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -117,8 +179,6 @@
                         </div>
                       </div>
                     </div>
-
-
 
                   </div>
               </div>

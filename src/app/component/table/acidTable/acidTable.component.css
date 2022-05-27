@@ -148,23 +148,39 @@ p {
 
 
 .big-col{
-  min-width: 130px;
+  width: 600px;
+  height: 150px;
+
 }
 
 
 
-.addBtn{
-  display:flex;
-  position: absolute;
-  left: -130px;
+.big-col:hover .bothBtn{
+  display: block;
+
 }
 
+.column-width{
+  height: 100px;
+  width: 210px;
+}
+.menuSet{
+  border: none;
+  background: none;
+  color:white
+}
+.mat-icon {
+  vertical-align: middle;
+}
 .bothBtn{
-display: block;
-
+display:none;
+width:100px;
 }
 
-
+.iconSet{
+  border: none;
+  background: none;
+}
 .modal-dialog{
   position:sticky;
 top: 150px;
