@@ -1,3 +1,7 @@
+import { SortsService } from './../../../service/sorts.service';
+import { Router } from '@angular/router';
+import { AcidService } from './../../../service/acid.service';
+import { OilService } from './../../../service/oil.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Injectable, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -5,9 +9,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Acid } from 'src/app/interface/tableInterface/acid';
+import { Oil } from 'src/app/interface/tableInterface/oil';
 import { OilAcid } from 'src/app/interface/tableInterface/oilAcid';
 import { OilAcidService } from 'src/app/service/oilAcid.service';
 import * as xlsx from 'xlsx';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { Sorts } from 'src/app/interface/tableInterface/sorts';
 
 @Component({
   selector: 'app-oilAcidTable',
@@ -17,23 +25,25 @@ import * as xlsx from 'xlsx';
 @Injectable()
 export class OilAcidTableComponent implements OnInit {
   public OilAcids: OilAcid[] = [];
+  public Sorts: Sorts[] = [];
   public editOilAcids: OilAcid | undefined;
   public deleteOilAcids: OilAcid | undefined;
-
-  displayedColumns: string[] = ['id_acid_oil', 'id_oils', 'name_acids', 'acid_value','clean'];
+  public Acids: Acid[] = [];
+  public Oils: Oil[] = [];
+  public sorts:any[]=[];
+  displayedColumns: string[] = ['id_acid_oil', 'oil_names', 'oils_sort', 'name_acids', 'acid_value','clean'];
   dataSource = new MatTableDataSource<OilAcid>();
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   fileName= 'ExportedOilAcid.xlsx';
 
-  constructor( private oilAcidService: OilAcidService) { }
+  constructor(private sortsService:SortsService, private oilAcidService: OilAcidService, private oilService: OilService, private acidService:AcidService, private router:Router) { }
 
   ngOnInit() {
     this.getOilAcid();
-
-
-
+    this.getAcid();
+    this.getOil();
   }
 
 exportToExcel():void {
@@ -56,10 +66,41 @@ public getOilAcid(): void {
 
     },
     error: (error: HttpErrorResponse) => {
+      if(error.status === 401){
+        confirm('Вы не авторизовались и будете перенаправлены на страницу авторизации')
+        this.router.navigate(['/login']);
+      }
+      else{
       alert(error.message);
+      }
+    },
+  })
+  this.sortsService.getSorts().subscribe({
+    next: (response: Sorts[]) => {
+      this.sorts = response;
+      console.log(this.sorts)
+    },
+    error: (error: HttpErrorResponse) => {
+      alert(error.message);
+    }})
+}
+
+public getAcid(): void {
+  this.acidService.getAcid().subscribe({
+    next: (response: Acid[]) => {
+      this.Acids = response;
     }
   })
 }
+
+public getOil(): void {
+  this.oilService.getOil().subscribe({
+    next: (response: Oil[]) => {
+      this.Oils = response;
+    }
+  })
+}
+
 public onOpenOilAcidModal(mode: string, OilAcids?: OilAcid): void {
   const container = document.getElementById('nav-oil-acid');
   const button = document.createElement('button');
@@ -95,6 +136,8 @@ public onAddOilAcid(addForm: NgForm): void {
     }
   })
 }
+
+
 
 
 

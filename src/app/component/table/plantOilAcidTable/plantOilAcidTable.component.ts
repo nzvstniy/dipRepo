@@ -1,3 +1,5 @@
+import { AcidService } from './../../../service/acid.service';
+import { PlantOilTableComponent } from './../plantOilTable/plantOilTable.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -7,6 +9,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PlantOilAcid } from 'src/app/interface/tableInterface/plantOilAcid';
 import { PlantOilAcidService } from 'src/app/service/plantOilAcid.service';
 import * as xlsx from 'xlsx';
+import { PlantOilService } from 'src/app/service/plantOil.service';
+import { PlantOil } from 'src/app/interface/tableInterface/plantOil';
+import { Acid } from 'src/app/interface/tableInterface/acid';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-plantOilAcidTable',
@@ -19,18 +25,21 @@ export class PlantOilAcidTableComponent implements OnInit {
   public PlantOilAcids: PlantOilAcid[] = [];
   public editPlantOilAcids: PlantOilAcid | undefined;
   public deletePlantOilAcids: PlantOilAcid | undefined;
+  public PlantOils: PlantOil[] = [];
+  public Acids: Acid[] = [];
 
-  displayedColumns: string[] = ['id_acid_plant', 'id_plants', 'name_acids', 'fat_acid_content_min', 'fat_acid_content_max','clean'];
+  displayedColumns: string[] = ['id_acid_plant', 'name_oils', 'name_acids', 'fat_acid_content_min', 'fat_acid_content_max','clean'];
   dataSource = new MatTableDataSource<PlantOilAcid>();
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   fileName= 'ExportedPlantOilAcid.xlsx';
 
-
-  constructor(private plantOilAcidService: PlantOilAcidService,) { }
+  constructor(private plantOilAcidService: PlantOilAcidService, private plantService: PlantOilService, private acidService: AcidService, private router:Router) { }
 
   ngOnInit() {
     this.getPlantOilAcid();
+    this.getPlantOil();
+    this.getAcid();
   }
 
   exportToExcel():void {
@@ -51,10 +60,32 @@ export class PlantOilAcidTableComponent implements OnInit {
         this.dataSource.sort = this.sort;
       },
       error: (error: HttpErrorResponse) => {
+        if(error.status === 401){
+          confirm('Вы не авторизовались и будете перенаправлены на страницу авторизации')
+          this.router.navigate(['/login']);
+        }
+        else{
         alert(error.message);
+        }
+      },
+    })
+  }
+
+  public getPlantOil(): void {
+    this.plantService.getPlantOil().subscribe({
+      next: (response: PlantOil[]) => {
+       this.PlantOils = response;
       }
     })
   }
+  public getAcid(): void {
+    this.acidService.getAcid().subscribe({
+      next: (response: Acid[]) => {
+        this.Acids = response;
+      }
+    })
+  }
+
   public onOpenPlantOilAcidModal(mode: string, PlantOilAcids?: PlantOilAcid): void {
     const container = document.getElementById('nav-plant-oil-acid');
     const button = document.createElement('button');
@@ -81,6 +112,8 @@ export class PlantOilAcidTableComponent implements OnInit {
       next: (response: PlantOilAcid) => {
         console.log(response);
         this.getPlantOilAcid();
+        addForm.reset();
+
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);

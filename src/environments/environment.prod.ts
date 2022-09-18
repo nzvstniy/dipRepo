@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://0eae-95-32-247-126.eu.ngrok.io'
- //apiBaseUrl: 'http://localhost:8080'
+  //apiBaseUrl: 'https://d28d-77-45-176-105.eu.ngrok.io'
+  apiBaseUrl: 'http://localhost:8080'
 };

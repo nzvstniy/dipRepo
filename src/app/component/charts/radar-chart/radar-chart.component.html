@@ -1,0 +1,46 @@
+
+<app-navbar></app-navbar>
+
+<div class="containter">
+  <div class="row">
+
+
+<div class="chart">
+  <p class="lead">Выберите масло для построения лепестковой диаграммы</p>
+
+  <select ngModel name="id_oils" class="form-control" id="id_oils" (change)="onChange()" required>
+    <option *ngFor="let oilsID of Oils" value={{oilsID.oil_sort}}>
+      {{oilsID.oil_name}}
+    </option>
+  </select>
+  <canvas id="canvas">{{chart}}</canvas>
+</div>
+
+
+
+<div class="chartTable">
+  <p class="lead">Совпадение точного значения с эталонными значениями: {{counter|percent}}</p>
+  <table class="table" >
+  <thead>
+      <tr>
+          <th>Название жирной кислоты</th>
+          <th>Минимальное значение</th>
+          <th>Максимальное значение</th>
+          <th>Точное значение</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let users of chartArray" [ngClass]="{'green': users.currentValue >= users.minValue && users.currentValue <= users.maxValue, 'red':users.currentValue < users.minValue || users.currentValue > users.maxValue}">
+          <td>{{users.acidName}}</td>
+          <td>{{users.minValue}}</td>
+          <td>{{users.maxValue}}</td>
+          <td>
+            {{users.currentValue}}
+          </td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+  </div>
+<!--*ngIf="users.currentValue>=users.minValue && users.currentValue<=users.maxValue" -->
+</div>

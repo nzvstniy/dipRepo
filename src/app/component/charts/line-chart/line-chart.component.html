@@ -1,0 +1,15 @@
+
+<app-navbar></app-navbar>
+
+<div class="chart">
+  <p class="lead">Выберите масло для построения линейной диаграммы</p>
+
+  <select ngModel name="id_plants" class="form-control" id="id_plants" (change)="onChange()" required>
+    <option *ngFor="let oilsID of Oils" value={{oilsID.oil_sort}}>
+      {{oilsID.oil_name}}
+    </option>
+  </select>
+  <canvas id="canvas">{{chart}}</canvas>
+</div>
+
+

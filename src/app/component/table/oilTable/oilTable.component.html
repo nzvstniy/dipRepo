@@ -1,4 +1,5 @@
 
+<app-navbar></app-navbar>
 
 <main>
 
@@ -27,40 +28,40 @@
                             <span>Экспорт в Excel</span>
                           </button>
                         </mat-menu>
-                       <span>Тут будет название таблицы</span>
+                       <span>Масла для анализа</span>
                      </mat-toolbar>
 
                     <div class="mat-elevation-z8">
-                      <table mat-table [dataSource]="dataSource">
+                      <table mat-table [dataSource]="dataSource" matSort>
 
                         <ng-container matColumnDef="id_oil">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> ID </th>
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
                           <td mat-cell *matCellDef="let oil"> {{oil.id_oil}}
                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="oil_name">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> Название </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
                           <td mat-cell *matCellDef="let oil"> {{oil.oil_name}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="oil_country">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> Страна </th>
+                          <th class="column-country" mat-header-cell *matHeaderCellDef mat-sort-header> Страна </th>
                           <td mat-cell *matCellDef="let oil"> {{oil.oil_country}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="oil_maker">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> Производитель </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Производитель </th>
                           <td mat-cell *matCellDef="let oil"> {{oil.oil_maker}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="oil_sort">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> Сорт </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Сорт </th>
                           <td mat-cell *matCellDef="let oil"> {{oil.oil_sort}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="oil_note">
-                          <th mat-header-cell *matHeaderCellDef> Описание </th>
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание </th>
                           <td class="big-col" mat-cell *matCellDef="let oil"> {{oil.oil_note}}
 
                           </td>
@@ -143,7 +144,11 @@
               </div>
               <div class="form-group">
                 <label for="oil_sort">Сорт</label>
-                <input type="text" ngModel name="oil_sort" class="form-control" id="oil_sort" placeholder="Сорт" required>
+                <select ngModel name="oil_sort" class="form-control" id="oil_sort" placeholder="Сорт" required onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                  <option *ngFor="let oilsName of sorts" value={{oilsName.sort_name}}>
+                    {{ oilsName.sort_name}}
+                  </option>
+              </select>
              </div>
              <div class="form-group">
               <label for="oil_note">Описание</label>
@@ -186,8 +191,12 @@
                   </div>
                   <div class="form-group">
                     <label for="oil_sort">Сорт</label>
-                    <input type="text" ngModel="{{editOils?.oil_sort}}" name="oil_sort" class="form-control" id="oil_sort" placeholder="Сорт">
-                 </div>
+                    <select ngModel="{{editOils?.oil_sort}}" name="oil_sort" class="form-control" id="oil_sort" placeholder="Сорт" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                      <option *ngFor="let oilsName of sorts" value={{oilsName.sort_name}}>
+                        {{ oilsName.sort_name}}
+                      </option>
+                  </select>
+                  </div>
                  <div class="form-group">
                   <label for="oil_note">Описание</label>
                   <input type="text" ngModel="{{editOils?.oil_note}}" name="oil_note" class="form-control" id="oil_note" placeholder="Описание">

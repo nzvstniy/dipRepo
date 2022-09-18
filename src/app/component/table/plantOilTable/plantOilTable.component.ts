@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Injectable, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -27,7 +28,7 @@ export class PlantOilTableComponent implements OnInit {
 
   fileName= 'ExportedPlantOil.xlsx';
 
-  constructor( private plantOilService: PlantOilService) { }
+  constructor( private plantOilService: PlantOilService, private router:Router) { }
 
   ngOnInit() {
     this.getPlantOil();
@@ -51,8 +52,14 @@ export class PlantOilTableComponent implements OnInit {
         this.dataSource.sort = this.sort;
       },
       error: (error: HttpErrorResponse) => {
+        if(error.status === 401){
+          confirm('Вы не авторизовались и будете перенаправлены на страницу авторизации')
+          this.router.navigate(['/login']);
+        }
+        else{
         alert(error.message);
-      }
+        }
+      },
     })
   }
   public onOpenPlantOilModal(mode: string, PlantOils?: PlantOil): void {

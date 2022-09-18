@@ -1,4 +1,5 @@
 
+<app-navbar></app-navbar>
 
 <main>
 
@@ -27,28 +28,33 @@
                             <span>Экспорт в Excel</span>
                           </button>
                         </mat-menu>
-                       <span>Тут будет название таблицы</span>
+                       <span>Масла - жирные кислоты</span>
                      </mat-toolbar>
                     <div class="mat-elevation-z8">
-                      <table mat-table [dataSource]="dataSource">
+                      <table mat-table [dataSource]="dataSource" matSort>
 
                         <ng-container matColumnDef="id_acid_oil">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> ID </th>
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
                           <td mat-cell *matCellDef="let oilAcid"> {{oilAcid.id_acid_oil}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="id_oils">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> ID масла </th>
-                          <td mat-cell *matCellDef="let oilAcid"> {{oilAcid.id_oils}} </td>
+                        <ng-container matColumnDef="oil_names">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Название масла </th>
+                          <td mat-cell *matCellDef="let oilAcid"> {{oilAcid.oil_names}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="oils_sort">
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Сорт масла </th>
+                          <td mat-cell *matCellDef="let oilAcid"> {{oilAcid.oils_sort}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="name_acids">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> Название </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Название жирной кислоты</th>
                           <td mat-cell *matCellDef="let oilAcid"> {{oilAcid.name_acids}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="acid_value">
-                          <th mat-header-cell *matHeaderCellDef> Значение </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Значение </th>
                           <td class="big-col" mat-cell *matCellDef="let oilAcid"> {{oilAcid.acid_value}}
 
                         </td>
@@ -75,34 +81,9 @@
                       <mat-paginator
                       [pageSizeOptions]="[5, 10, 20, 100]"
                                      showFirstLastButtons
-                                     aria-label="Select page of periodic elements">
+                                     aria-label="Select page">
                       </mat-paginator>
                     </div>
-                    <!--
-                    <table datatable class="row-border hover" id="oilAcids" [dtOptions]="dtOptions" >
-                      <thead>
-                          <tr>
-                              <th>ID</th>
-                              <th>ID масла</th>
-                              <th>Название</th>
-                              <th>Значение</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="btnShow" *ngFor="let oilAcid of OilAcids">
-                              <td >{{oilAcid.id_acid_oil}}</td>
-                              <td >{{oilAcid.id_oils}}</td>
-                              <td >{{oilAcid.name_acids}}</td>
-                              <td class="big-col">{{oilAcid.acid_value}}
-                                <div class="bothBtn">
-                                  <button (click)="onOpenOilAcidModal('edit', oilAcid)" class="btn btn-primary tooltips ml-3 mr-3" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </button>
-                                  <button (click)="onOpenOilAcidModal('delete', oilAcid)" class="btn btn-danger tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
-                                </div>
-                              </td>
-                        </tr>
-                      </tbody>
-                      </table>
--->
                           <!-- Add Acid Modal -->
     <div class="modal fade" id="addOilAcidModal" tabindex="-1" role="dialog" aria-labelledby="addOilAcidModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -116,13 +97,30 @@
            <div class="modal-body">
               <form #addForm="ngForm" (ngSubmit)="onAddOilAcid(addForm)">
               <div class="form-group">
-                 <label for="id_oils">ID масла</label>
-                 <input type="text" ngModel name="id_oils" class="form-control" id="id_oils" placeholder="Номер" required>
-              </div>
+                 <label for="oil_names">Название масла</label>
+                 <select ngModel name="oil_names" class="form-control" id="oil_names" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                  <option *ngFor="let oils of Oils" value={{oils.oil_name}}>
+                    {{oils.oil_name}}
+                  </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="oils_sort">Сорт масла</label>
+              <select ngModel name="oils_sort" class="form-control" id="oils_sort" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                <option *ngFor="let oils of Oils" value={{oils.oil_sort}}>
+                  {{oils.oil_sort}}
+                </option>
+              </select>
+            </div>
               <div class="form-group">
-                 <label for="name_acids">Название</label>
-                 <input type="text" ngModel name="name_acids" class="form-control" id="name_acids" placeholder="Название" required>
-              </div>
+                 <label for="name_acids">Название жирной кислоты</label>
+                 <select ngModel name="name_acids" class="form-control" id="name_acids" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                  <option *ngFor="let acidsName of Acids" value={{acidsName.acid_name}}>
+                    {{ acidsName.acid_name + " " + acidsName.acid_full_name}}
+                  </option>
+              </select>
+              <small id="nameInfo" class="form-text text-muted" ></small>
+            </div>
               <div class="form-group">
                  <label for="acid_value">Значение</label>
                  <input type="text" ngModel name="acid_value" class="form-control" id="acid_value" placeholder="Значение" required>
@@ -138,7 +136,7 @@
     </div>
 
     <!-- Edit Acid -->
-    <div class="modal fade" id="editOilAcidModal" tabindex="-1" role="dialog" aria-labelledby="oilAcidEditModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editOilAcidModal" tabindex="-1" role="dialog" aria-labelledby="OilAcidEditModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
          <div class="modal-content">
             <div class="modal-header">
@@ -149,23 +147,39 @@
             </div>
             <div class="modal-body">
                <form #editForm="ngForm">
-                  <div class="form-group">
-                     <label for="id_oils">ID масла</label>
-                     <input type="text" ngModel="{{editOilAcids?.id_oils}}" name="id_oils" class="form-control" id="id_oils" aria-describedby="oilAcidHelp" placeholder="ID масла">
-                  </div>
-                  <input type="hidden" ngModel="{{editOilAcids?.id_acid_oil}}" name="id_acid" class="form-control" id="id_acid" placeholder="Id">
+                  <div class="form-group" id="oilName">
+                     <label for="oil_names">Название масла</label>
+                     <select ngModel="{{editOilAcids?.oil_names}}" name="oil_names" class="form-control" id="oil_names" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                      <option *ngFor="let oilsID of Oils" value={{oilsID.oil_name}}>
+                        {{ oilsID.oil_name}}
+                      </option>
+                  </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="oils_sort">Сорт масла</label>
+                      <select ngModel="{{editOilAcids?.oils_sort}}" name="oils_sort" class="form-control" id="oils_sort" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                        <option *ngFor="let oils of Oils" value={{oils.oil_sort}}>
+                          {{oils.oil_sort}}
+                        </option>
+                      </select>
+                    </div>
+                  <input type="hidden" ngModel="{{editOilAcids?.id_acid_oil}}" name="id_acid_oil" class="form-control" id="id_acid_oil" placeholder="Id">
                   <div class="form-group">
                      <label for="name_acids">Название</label>
-                     <input type="text" ngModel="{{editOilAcids?.name_acids}}" name="name_acids" class="form-control" id="name_acids" placeholder="Название">
-                  </div>
+                     <select ngModel="{{editOilAcids?.name_acids}}" name="name_acids" class="form-control" id="name_acids" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();' required>
+                      <option *ngFor="let acidsName of Acids" value={{acidsName.acid_name}}>
+                        {{ acidsName.acid_name + " " + acidsName.acid_full_name}}
+                      </option>
+                  </select>
+                    </div>
                   <div class="form-group">
                      <label for="acid_value">Значение</label>
                      <input type="text" ngModel="{{editOilAcids?.acid_value}}" name="acid_value" class="form-control" id="acid_value" placeholder="Значение">
                   </div>
                   <div class="modal-footer">
-                     <button (click)="onUpdateOilAcid(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
-                     <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
-                  </div>
+                    <button (click)="onUpdateOilAcid(editForm.value)"  data-dismiss="modal" class="btn btn-primary" >Сохранить</button>
+                    <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                 </div>
                </form>
             </div>
          </div>

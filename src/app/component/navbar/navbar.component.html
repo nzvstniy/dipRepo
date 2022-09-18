@@ -1,0 +1,49 @@
+<header class="header-area overlay" >
+
+  <nav class="navbar navbar-expand-md navbar-dark sticky-top ">
+
+  <div class="container" >
+
+    <a routerLink="/home" class="navbar-brand">
+      <img src="/assets/logo.png">
+    </a>
+
+    <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#main-nav">
+      <span class="menu-icon-bar"></span>
+      <span class="menu-icon-bar"></span>
+      <span class="menu-icon-bar"></span>
+    </button>
+
+    <div id="main-nav"  class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li><a routerLink="/home"  class="nav-item nav-link ">Главная</a></li>
+        <li class="nav-item dropdown">
+         <a href="#" class="nav-item nav-link" data-toggle="dropdown">Таблицы</a>
+         <div class="dropdown-menu">
+          <a routerLink="/table/acid"  class="dropdown-item">Кислоты</a>
+          <a routerLink="/table/oil" class="dropdown-item">Масла для анализа</a>
+          <a routerLink="/table/oilAcid" class="dropdown-item">Масла - кислоты</a>
+          <a routerLink="/table/plantOil" class="dropdown-item">Эталонные масла</a>
+          <a routerLink="/table/plantOilAcid" class="dropdown-item">Эталонные масла - кислоты</a>
+        </div>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="nav-item nav-link" data-toggle="dropdown">Графики</a>
+          <div class="dropdown-menu">
+            <a routerLink="/bar" class="dropdown-item">Столбчатая диаграмма</a>
+            <a routerLink="/line" class="dropdown-item">Линейная диаграмма</a>
+            <a routerLink="/radar" class="dropdown-item">Лепестковая диаграмма</a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+</header>
+<div class="navigBar">
+</div>
+
+<main>
+  </main>

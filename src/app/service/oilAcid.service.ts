@@ -15,7 +15,8 @@ export class OilAcidService{
   constructor(private http: HttpClient) { }
 
   public getOilAcid(): Observable<OilAcid[]> {
-    return this.http.get<OilAcid[]>(`${this.apiServerUrl}/table/oilAcid/all`);
+    return this.http
+    .get<OilAcid[]>(`${this.apiServerUrl}/table/oilAcid/all`);
   }
 
   public addOilAcid(OilAcids: OilAcid): Observable<OilAcid> {

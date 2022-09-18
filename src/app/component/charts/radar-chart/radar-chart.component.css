@@ -1,0 +1,43 @@
+
+/*select{
+  width:40em;
+  position: absolute;
+  left:29%
+}
+*/
+
+.chart{
+  width: 600px;
+  height: 600px;
+  position: absolute;
+  left:5%;
+  top: 80px;
+}
+.chartTable{
+  position:absolute;
+  left:50%;
+  top:80px;
+  height: 700px
+}
+.green{
+  background-color: rgba(118, 254, 118, 0.892);
+}
+.red{
+  background-color: rgba(255, 82, 82, 0.586);
+}
+table{
+  width:600px;
+  height: 600px;
+}
+
+
+
+thead{
+  color: #0000008a;
+}
+th{
+  font-weight: normal;
+}
+td{
+  border:0
+}

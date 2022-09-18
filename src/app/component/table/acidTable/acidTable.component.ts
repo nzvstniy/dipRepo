@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Acid } from 'src/app/interface/tableInterface/acid';
 import { AcidService } from 'src/app/service/acid.service';
 import * as xlsx from 'xlsx';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-acidTable',
   templateUrl: './acidTable.component.html',
@@ -29,11 +30,12 @@ export class AcidTableComponent implements OnInit {
   fileName= 'ExportedAcid.xlsx';
 
 
-  constructor(private acidService: AcidService) {
+  constructor(private acidService: AcidService, private router: Router) {
 
    }
 
   ngOnInit() {
+
     this.getAcid();
 
   }
@@ -57,7 +59,13 @@ export class AcidTableComponent implements OnInit {
       },
 
       error: (error: HttpErrorResponse) => {
+        if(error.status === 401){
+          confirm('Вы не авторизовались и будете перенаправлены на страницу авторизации')
+          this.router.navigate(['/login']);
+        }
+        else{
         alert(error.message);
+        }
       },
 
     })
@@ -128,6 +136,5 @@ export class AcidTableComponent implements OnInit {
       }
     })
   }
-
 
 }

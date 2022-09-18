@@ -1,6 +1,7 @@
 
 
 
+<app-navbar></app-navbar>
 
 <main >
 
@@ -29,32 +30,32 @@
                             <span>Экспорт в Excel</span>
                           </button>
                         </mat-menu>
-                       <span>Тут будет название таблицы</span>
+                       <span>Жирные кислоты</span>
                      </mat-toolbar>
 
 
 
                     <div id="acids" class="mat-elevation-z8">
-                      <table  mat-table [dataSource]="dataSource">
+                      <table  mat-table [dataSource]="dataSource" matSort>
 
                         <ng-container matColumnDef="id_acid">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> id_acid </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
                           <td mat-cell *matCellDef="let acid"> {{acid.id_acid}}
                           </td>
                         </ng-container>
 
                         <ng-container matColumnDef="acid_name">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> Name </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Номер </th>
                           <td mat-cell *matCellDef="let acid"> {{acid.acid_name}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="acid_full_name">
-                          <th class="column-width" mat-header-cell *matHeaderCellDef> acid_full_name </th>
+                          <th class="column-width" mat-header-cell *matHeaderCellDef mat-sort-header> Название </th>
                           <td mat-cell *matCellDef="let acid"> {{acid.acid_full_name}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="acid_description">
-                          <th mat-header-cell *matHeaderCellDef> acid_description </th>
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Описание </th>
                           <td class="big-col" mat-cell *matCellDef="let acid"> {{acid.acid_description}}
                           </td>
                         </ng-container>
@@ -200,7 +201,25 @@
                         </div>
                       </div>
                     </div>
-
+                    <div class="modal fade" id="deleteAcidModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                         <div class="modal-content">
+                            <div class="modal-header">
+                               <h5 class="modal-title" id="deleteModelLabel">Удалить</h5>
+                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                               <span aria-hidden="true">&times;</span>
+                               </button>
+                            </div>
+                            <div class="modal-body">
+                               <p>Удалить ?</p>
+                               <div class="modal-footer">
+                                  <button class="btn btn-danger" data-dismiss="modal">Да</button>
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                                </div>
+                            </div>
+                         </div>
+                      </div>
+                    </div>
 
 
                   </div>
